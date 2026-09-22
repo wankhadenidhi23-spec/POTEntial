@@ -191,6 +191,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
 <script>
 
 const supabaseClient = window.supabase.createClient(
@@ -257,10 +260,6 @@ loginForm.addEventListener("submit", async (event) => {
     message.textContent = "Logging in...";
 
 
-    // ---------------------------------------------
-    // 1. LOGIN THROUGH SUPABASE AUTH
-    // ---------------------------------------------
-
     const { data, error } =
         await supabaseClient.auth.signInWithPassword({
             email: email,
@@ -279,12 +278,8 @@ loginForm.addEventListener("submit", async (event) => {
 
     const user = data.user;
 
-    console.log("Logged in user:", user);
 
-
-    // ---------------------------------------------
-    // 2. GET USER PROFILE
-    // ---------------------------------------------
+    // GET USER ROLE
 
     const { data: profile, error: profileError } =
         await supabaseClient
@@ -292,10 +287,6 @@ loginForm.addEventListener("submit", async (event) => {
             .select("Role")
             .eq("user_id", user.id)
             .maybeSingle();
-
-
-    console.log("Profile:", profile);
-    console.log("Profile Error:", profileError);
 
 
     if (profileError) {
@@ -307,57 +298,39 @@ loginForm.addEventListener("submit", async (event) => {
     }
 
 
-    // ---------------------------------------------
-    // 3. PROFILE DOES NOT EXIST
-    // ---------------------------------------------
-
     if (!profile) {
 
         message.textContent =
-            "Profile not found. Please contact the administrator.";
+            "Profile not found.";
 
         return;
     }
 
 
-    // ---------------------------------------------
-    // 4. STUDENT
-    // ---------------------------------------------
+    // STUDENT
 
     if (profile.Role === "student") {
 
-        message.textContent =
-            "Login successful!";
-
         window.location.href =
-            "../student dashboard/student-dashboard.html";
+            "student dashboard/student-dashboard.html";
 
         return;
     }
 
 
-    // ---------------------------------------------
-    // 5. BUSINESS
-    // ---------------------------------------------
+    // BUSINESS
 
     if (profile.Role === "business") {
 
-        message.textContent =
-            "Login successful!";
-
         window.location.href =
-            "businessprofile.html";
+            "business-dashboard.html";
 
         return;
     }
 
 
-    // ---------------------------------------------
-    // 6. INVALID ROLE
-    // ---------------------------------------------
-
     message.textContent =
-        "Invalid role found in profile: " + profile.Role;
+        "Invalid role: " + profile.Role;
 
 });
 
@@ -381,13 +354,15 @@ signupForm.addEventListener("submit", async (event) => {
         document.getElementById("signupPassword").value;
 
     const role =
-        document.getElementById("signupRole").value;
+        document.getElementById("signupRole").value
+            .trim()
+            .toLowerCase();
 
 
-    if (!role) {
+    if (!name || !email || !password || !role) {
 
         message.textContent =
-            "Please select Student or Business.";
+            "Please fill all fields.";
 
         return;
     }
@@ -397,9 +372,9 @@ signupForm.addEventListener("submit", async (event) => {
         "Creating account...";
 
 
-    // ---------------------------------------------
-    // CREATE SUPABASE AUTH USER
-    // ---------------------------------------------
+    // =================================================
+    // 1. CREATE AUTH USER
+    // =================================================
 
     const { data, error } =
         await supabaseClient.auth.signUp({
@@ -411,11 +386,8 @@ signupForm.addEventListener("submit", async (event) => {
             options: {
 
                 data: {
-
                     full_name: name,
-
                     role: role
-
                 }
 
             }
@@ -425,21 +397,14 @@ signupForm.addEventListener("submit", async (event) => {
 
     if (error) {
 
+        console.error("Signup error:", error);
+
         message.textContent =
             "Signup Error: " + error.message;
-
-        console.error(error);
 
         return;
     }
 
-
-    console.log("Signup result:", data);
-
-
-    // ---------------------------------------------
-    // CHECK USER
-    // ---------------------------------------------
 
     if (!data.user) {
 
@@ -450,9 +415,59 @@ signupForm.addEventListener("submit", async (event) => {
     }
 
 
-    // ---------------------------------------------
-    // SUCCESS
-    // ---------------------------------------------
+    console.log(
+        "Auth user created:",
+        data.user.id
+    );
+
+
+    // =================================================
+    // 2. CREATE BUSINESS PROFILE
+    // =================================================
+
+    if (role === "business") {
+
+        const { data: business, error: businessError } =
+            await supabaseClient
+                .from("businesses")
+                .insert({
+
+                    owner_id: data.user.id,
+
+                    business_name: name,
+
+                    business_type: "Not specified"
+
+                })
+                .select()
+                .single();
+
+
+        if (businessError) {
+
+            console.error(
+                "Business insert error:",
+                businessError
+            );
+
+            message.textContent =
+                "Account created, but business profile failed: "
+                + businessError.message;
+
+            return;
+        }
+
+
+        console.log(
+            "Business profile created:",
+            business
+        );
+    }
+
+
+    // =================================================
+    // 3. SUCCESS
+    // =================================================
 
     signupForm.reset();
 
