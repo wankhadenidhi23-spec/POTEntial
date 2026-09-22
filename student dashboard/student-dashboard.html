@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard - POTential</title>
+
+    <link rel="stylesheet" href="student-dashboard.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            POTential
+        </div>
+
+        <nav class="sidebar-nav">
+
+        <a href="#" class="nav-link active">
+            🏠 Dashboard
+        </a>
+
+        <a href="browse-jobs.html" class="nav-link">
+            🔍 Find Opportunities
+        </a>
+
+        <a href="my-applications.html" class="nav-link">
+    📄 My Applications
+</a>
+
+        <a href="student-profile.html" class="nav-link">
+    👤 Profile
+</a>
+
+        <a href="#" class="nav-link">
+            ⚙️ Settings
+        </a>
+
+    </nav>
+
+    <a href="#" class="nav-link logout">
+        🚪 Logout
+    </a>
+
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+
+            <div>
+                <h1>Student Dashboard</h1>
+                <p>Welcome back! Find your next opportunity.</p>
+            </div>
+
+            <div class="profile">
+                <div class="profile-icon">👤</div>
+                <span>Student</span>
+            </div>
+
+        </header>
+
+
+        <!-- Welcome Section -->
+        <section class="welcome">
+
+            <h2>Good Morning 👋</h2>
+
+            <p>
+                Explore opportunities and take the next step
+                towards your career.
+            </p>
+
+        </section>
+
+
+        <!-- Statistics -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3>Applications</h3>
+                <p>12</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <p>5</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Accepted</h3>
+                <p>4</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Rejected</h3>
+                <p>3</p>
+            </div>
+
+        </section>
+
+
+        <!-- Recommended Opportunities -->
+        <section class="opportunities">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Recommended Opportunities</h2>
+                    <p>Opportunities you may be interested in.</p>
+                </div>
+
+                <a href="browse-jobs.html">
+                    View All
+                </a>
+
+            </div>
+
+
+            <!-- Opportunity Cards -->
+            <div class="opportunity-grid">
+<section class="opportunities">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Recommended Opportunities</h2>
+
+            <p>
+                Opportunities you may be interested in.
+            </p>
+        </div>
+
+        <a href="browse-jobs.html">
+            View All
+        </a>
+
+    </div>
+
+
+    <div class="opportunity-grid">
+
+        <!-- JavaScript will create cards here -->
+
+    </div>
+
+</section>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="student_dashboard.js"></script>
+</body>
+</html>
