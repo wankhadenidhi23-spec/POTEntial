@@ -79,54 +79,70 @@
 
             <div class="opportunity-grid">
 
-                <!-- Application 1 -->
-                <div class="opportunity-card">
-
-                    <h3>Web Developer Intern</h3>
-
-                    <p>🏢 ABC Technologies</p>
-                    <p>📍 Amravati</p>
-                    <p>💰 ₹8,000</p>
-
-                    <span class="tag">Pending</span>
-
-                </div>
-
-
-                <!-- Application 2 -->
-                <div class="opportunity-card">
-
-                    <h3>Graphic Designer</h3>
-
-                    <p>🏢 Creative Studio</p>
-                    <p>📍 Nagpur</p>
-                    <p>💰 ₹6,000</p>
-
-                    <span class="tag">Accepted</span>
-
-                </div>
-
-
-                <!-- Application 3 -->
-                <div class="opportunity-card">
-
-                    <h3>Python Developer</h3>
-
-                    <p>🏢 Tech Solutions</p>
-                    <p>🌐 Remote</p>
-                    <p>💰 ₹10,000</p>
-
-                    <span class="tag">Rejected</span>
-
-                </div>
-
+            
             </div>
 
         </section>
 
     </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js"></script>
+<script src="../supabase-client.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
 
+    const container = document.getElementById("applicationsContainer");
+
+    // Get logged-in student
+    const { data: { user }, error: authError } =
+        await supabaseClient.auth.getUser();
+
+    if (authError || !user) {
+        container.innerHTML = "<p>Please login first.</p>";
+        return;
+    }
+
+    console.log("Logged-in Student ID:", user.id);
+
+    // Get student's applications
+    const { data: applications, error } = await supabaseClient
+        .from("applications")
+        .select("*")
+        .eq("student_id", user.id);
+
+    if (error) {
+        console.error("Applications error:", error);
+        container.innerHTML = "<p>Unable to load applications.</p>";
+        return;
+    }
+
+    console.log("MY APPLICATIONS:", applications);
+
+    if (!applications || applications.length === 0) {
+        container.innerHTML = "<p>You have not applied for any opportunities yet.</p>";
+        return;
+    }
+
+    container.innerHTML = "";
+
+    applications.forEach(function (application) {
+
+        const card = document.createElement("div");
+        card.className = "opportunity-card";
+
+        card.innerHTML = `
+            <h3>Job ID: ${application.job_id}</h3>
+
+            <p>📄 Application ID: ${application.id}</p>
+
+            <p>📅 Applied: ${application.applied_at || "Not specified"}</p>
+
+            <span class="tag">${application.status || "Pending"}</span>
+        `;
+
+        container.appendChild(card);
+    });
+
+});
+</script>
 </body>
 </html>

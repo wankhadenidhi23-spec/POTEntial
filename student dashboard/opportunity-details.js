@@ -204,3 +204,63 @@ function showError(message) {
     `;
 
 }
+// ==========================================
+// APPLY NOW
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const applyButton = document.getElementById("applyButton");
+
+    if (!applyButton) {
+        console.error("Apply button not found.");
+        return;
+    }
+
+    applyButton.addEventListener("click", async function () {
+
+        // Get logged-in student
+        const { data: { user }, error: authError } =
+            await supabaseClient.auth.getUser();
+
+        if (authError || !user) {
+            alert("Please login first.");
+            return;
+        }
+
+        console.log("Logged-in Student ID:", user.id);
+
+        // Get selected job ID
+        const jobId = localStorage.getItem("selectedJobId");
+
+        if (!jobId) {
+            alert("Job information not found.");
+            return;
+        }
+
+        console.log("Selected Job ID:", jobId);
+
+        // Insert application
+        const { data, error } = await supabaseClient
+            .from("applications")
+            .insert([
+                {
+                    job_id: jobId,
+                    student_id: user.id,
+                    status: "pending"
+                }
+            ])
+            .select();
+
+        if (error) {
+            console.error("Application error:", error);
+            alert("Application failed: " + error.message);
+            return;
+        }
+
+        console.log("APPLICATION CREATED:", data);
+
+        alert("Application submitted successfully!");
+    });
+
+});
