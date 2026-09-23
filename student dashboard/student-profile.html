@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Student Profile - POTential</title>
 
     <link rel="stylesheet" href="student-dashboard.css">
@@ -13,7 +15,7 @@
             padding: 30px;
             border-radius: 14px;
             margin-top: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .profile-header {
@@ -65,6 +67,7 @@
 
         .profile-field span {
             color: #6b7280;
+            word-break: break-word;
         }
 
         .skills {
@@ -100,6 +103,106 @@
             background: #4338ca;
         }
 
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 30px;
+            color: #dc2626;
+        }
+
+        /* Edit Profile Form */
+
+        .edit-form {
+            display: none;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .edit-form h3 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4f46e5;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .save-btn:hover {
+            background: #4338ca;
+        }
+
+        .cancel-btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #374151;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .cancel-btn:hover {
+            background: #d1d5db;
+        }
+
+        .success-message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #dcfce7;
+            color: #166534;
+        }
+
         @media (max-width: 700px) {
             .profile-details {
                 grid-template-columns: 1fr;
@@ -128,7 +231,7 @@
                 🏠 Dashboard
             </a>
 
-            <a href="index.html" class="nav-link">
+            <a href="browse-jobs.html" class="nav-link">
                 🔍 Find Opportunities
             </a>
 
@@ -146,10 +249,9 @@
 
         </nav>
 
-        <a href="#" class="nav-link logout">
-            🚪 Logout
-        </a>
-
+        <a href="#" class="nav-link logout" id="logoutButton">
+    🚪 Logout
+</a>
     </aside>
 
 
@@ -157,93 +259,917 @@
     <main class="main-content">
 
         <header class="topbar">
+
             <h2>Student Profile</h2>
 
             <div class="profile">
-                <div class="profile-icon">S</div>
-                <span>Student</span>
+                <div class="profile-icon" id="topProfileIcon">
+                    S
+                </div>
+
+                <span id="topProfileName">
+                    Student
+                </span>
             </div>
+
         </header>
 
 
         <section class="profile-container">
 
-            <div class="profile-header">
+            <!-- Loading -->
+            <div id="loadingMessage" class="loading">
+                Loading profile...
+            </div>
 
-                <div class="large-profile-icon">
-                    👤
+
+            <!-- Profile Content -->
+            <div id="profileContent" style="display: none;">
+
+                <div class="profile-header">
+
+                    <div class="large-profile-icon" id="largeProfileIcon">
+                        👤
+                    </div>
+
+                    <div>
+                        <h1 id="profileName">
+                            Student
+                        </h1>
+
+                        <p id="profileRole">
+                            Student
+                        </p>
+                    </div>
+
                 </div>
 
-                <div>
-                    <h1>Student Name</h1>
-                    <p>AI & Data Science Student</p>
+
+                <!-- Profile Details -->
+                <div class="profile-details" id="profileDetails">
+                </div>
+
+
+                <!-- Skills -->
+                <div class="skills">
+
+                    <h3>Skills</h3>
+
+                    <div id="skillsContainer">
+                    </div>
+
+                </div>
+
+
+                <!-- Edit Button -->
+                <button class="edit-btn" id="editProfileButton">
+                    Edit Profile
+                </button>
+
+
+                <!-- Edit Form -->
+                <div class="edit-form" id="editForm">
+
+                    <h3>Edit Profile</h3>
+
+
+                    <div class="form-group">
+
+                        <label for="editFullName">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editFullName"
+                            placeholder="Enter your full name"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editCity">
+                            City
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editCity"
+                            placeholder="Enter your city"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editAge">
+                            Age
+                        </label>
+
+                        <input
+                            type="number"
+                            id="editAge"
+                            placeholder="Enter your age"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editAvailability">
+                            Availability
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editAvailability"
+                            placeholder="Example: Part-time / Internship"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editSkills">
+                            Skills
+                        </label>
+
+                        <textarea
+                            id="editSkills"
+                            placeholder="Example: Python, Java, HTML, CSS"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-buttons">
+
+                        <button
+                            class="save-btn"
+                            id="saveProfileButton"
+                        >
+                            Save Changes
+                        </button>
+
+                        <button
+                            class="cancel-btn"
+                            id="cancelEditButton"
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="success-message"
+                        id="successMessage"
+                    >
+                        Profile updated successfully!
+                    </div>
+
                 </div>
 
             </div>
 
 
-            <div class="profile-details">
-
-                <div class="profile-field">
-                    <strong>📧 Email</strong>
-                    <span>student@example.com</span>
-                </div>
-
-                <div class="profile-field">
-                    <strong>📱 Phone</strong>
-                    <span>+91 98765 43210</span>
-                </div>
-
-                <div class="profile-field">
-                    <strong>🎓 Course</strong>
-                    <span>B.Tech - AI & Data Science</span>
-                </div>
-
-                <div class="profile-field">
-                    <strong>📅 Year</strong>
-                    <span>2nd Year</span>
-                </div>
-
-                <div class="profile-field">
-                    <strong>📍 Location</strong>
-                    <span>Amravati, Maharashtra</span>
-                </div>
-
-                <div class="profile-field">
-                    <strong>💼 Availability</strong>
-                    <span>Part-time / Internship</span>
-                </div>
-
+            <!-- Error -->
+            <div
+                id="errorMessage"
+                class="error-message"
+                style="display: none;"
+            >
             </div>
-
-
-            <div class="skills">
-
-                <h3>Skills</h3>
-
-                <span class="skill-tag">Python</span>
-                <span class="skill-tag">Java</span>
-                <span class="skill-tag">HTML</span>
-                <span class="skill-tag">CSS</span>
-                <span class="skill-tag">JavaScript</span>
-                <span class="skill-tag">Data Science</span>
-
-            </div>
-
-
-            <button class="edit-btn">
-                Edit Profile
-            </button>
 
         </section>
 
     </main>
-<script>
-    document.querySelector(".edit-btn").addEventListener("click", function () {
-        alert("Profile editing feature will be available soon!");
+
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../supabase-config.js"></script>
+
+    <script src="../supabase-client.js"></script>
+
+
+    <script>
+
+        let currentProfile = null;
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadProfile
+        );
+
+
+        // ============================================
+        // LOAD PROFILE
+        // ============================================
+
+        async function loadProfile() {
+
+            const loadingMessage =
+                document.getElementById("loadingMessage");
+
+            const profileContent =
+                document.getElementById("profileContent");
+
+            const errorMessage =
+                document.getElementById("errorMessage");
+
+
+            const {
+                data: { user },
+                error: authError
+            } = await supabaseClient.auth.getUser();
+
+
+            if (authError || !user) {
+
+                loadingMessage.style.display = "none";
+
+                errorMessage.style.display = "block";
+
+                errorMessage.textContent =
+                    "Please login first.";
+
+                return;
+            }
+
+
+            console.log(
+                "Logged-in User ID:",
+                user.id
+            );
+
+
+            const {
+                data: profile,
+                error: profileError
+            } = await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+
+            if (profileError) {
+
+                console.error(
+                    "Profile loading error:",
+                    profileError
+                );
+
+                loadingMessage.style.display = "none";
+
+                errorMessage.style.display = "block";
+
+                errorMessage.textContent =
+                    "Unable to load your profile.";
+
+                return;
+            }
+
+
+            if (!profile) {
+
+                loadingMessage.style.display = "none";
+
+                errorMessage.style.display = "block";
+
+                errorMessage.textContent =
+                    "Profile data not found.";
+
+                return;
+            }
+
+
+            currentProfile = profile;
+
+
+            console.log(
+                "Profile data:",
+                profile
+            );
+
+
+            displayProfile(profile);
+
+
+            fillEditForm(profile);
+
+
+            loadingMessage.style.display = "none";
+
+            profileContent.style.display = "block";
+
+
+            setupEditButtons();
+        }
+
+
+        // ============================================
+        // DISPLAY PROFILE
+        // ============================================
+
+        function displayProfile(profile) {
+
+            const name =
+                profile.full_name || "Student";
+
+            const role =
+                profile.Role || "Student";
+
+
+            document.getElementById(
+                "profileName"
+            ).textContent = name;
+
+
+            document.getElementById(
+                "profileRole"
+            ).textContent = role;
+
+
+            document.getElementById(
+                "topProfileName"
+            ).textContent = name;
+
+
+            const firstLetter =
+                name.charAt(0).toUpperCase();
+
+
+            document.getElementById(
+                "topProfileIcon"
+            ).textContent = firstLetter;
+
+
+            document.getElementById(
+                "largeProfileIcon"
+            ).textContent = firstLetter;
+
+
+            const profileDetails =
+                document.getElementById(
+                    "profileDetails"
+                );
+
+
+            profileDetails.innerHTML = "";
+
+
+            Object.entries(profile).forEach(
+                function ([key, value]) {
+
+                    if (key === "skills") {
+                        return;
+                    }
+
+
+                    const field =
+                        document.createElement("div");
+
+                    field.className =
+                        "profile-field";
+
+
+                    const label =
+                        document.createElement("strong");
+
+
+                    const valueElement =
+                        document.createElement("span");
+
+
+                    let displayName = key;
+
+
+                    if (key === "full_name") {
+                        displayName = "Full Name";
+                    }
+
+                    else if (key === "Email") {
+                        displayName = "Email";
+                    }
+
+                    else if (key === "Role") {
+                        displayName = "Role";
+                    }
+
+                    else if (key === "Created_at") {
+                        displayName = "Created At";
+                    }
+
+                    else if (key === "user_id") {
+                        displayName = "User ID";
+                    }
+
+                    else if (key === "city") {
+                        displayName = "City";
+                    }
+
+                    else if (key === "availability") {
+                        displayName = "Availability";
+                    }
+
+                    else if (key === "age") {
+                        displayName = "Age";
+                    }
+
+                    else if (key === "id") {
+                        displayName = "Profile ID";
+                    }
+
+
+                    label.textContent =
+                        displayName;
+
+
+                    valueElement.textContent =
+                        value !== null &&
+                        value !== undefined &&
+                        value !== ""
+                            ? value
+                            : "Not specified";
+
+
+                    field.appendChild(label);
+
+                    field.appendChild(
+                        valueElement
+                    );
+
+                    profileDetails.appendChild(
+                        field
+                    );
+
+                }
+            );
+
+
+            displaySkills(profile.skills);
+        }
+
+
+        // ============================================
+        // DISPLAY SKILLS
+        // ============================================
+
+        function displaySkills(skills) {
+
+            const container =
+                document.getElementById(
+                    "skillsContainer"
+                );
+
+
+            container.innerHTML = "";
+
+
+            if (!skills) {
+
+                container.textContent =
+                    "No skills added yet.";
+
+                return;
+            }
+
+
+            let skillsArray = [];
+
+
+            if (Array.isArray(skills)) {
+
+                skillsArray = skills;
+
+            }
+
+            else if (
+                typeof skills === "string"
+            ) {
+
+                skillsArray = skills
+                    .split(",")
+                    .map(
+                        skill => skill.trim()
+                    )
+                    .filter(
+                        skill => skill !== ""
+                    );
+
+            }
+
+
+            if (skillsArray.length === 0) {
+
+                container.textContent =
+                    "No skills added yet.";
+
+                return;
+            }
+
+
+            skillsArray.forEach(
+                function (skill) {
+
+                    const tag =
+                        document.createElement(
+                            "span"
+                        );
+
+                    tag.className =
+                        "skill-tag";
+
+                    tag.textContent = skill;
+
+                    container.appendChild(tag);
+
+                }
+            );
+        }
+
+
+        // ============================================
+        // FILL EDIT FORM
+        // ============================================
+
+        function fillEditForm(profile) {
+
+            document.getElementById(
+                "editFullName"
+            ).value =
+                profile.full_name || "";
+
+
+            document.getElementById(
+                "editCity"
+            ).value =
+                profile.city || "";
+
+
+            document.getElementById(
+                "editAge"
+            ).value =
+                profile.age || "";
+
+
+            document.getElementById(
+                "editAvailability"
+            ).value =
+                profile.availability || "";
+
+
+            let skillsText = "";
+
+
+            if (Array.isArray(profile.skills)) {
+
+                skillsText =
+                    profile.skills.join(", ");
+
+            }
+
+            else if (
+                typeof profile.skills === "string"
+            ) {
+
+                skillsText =
+                    profile.skills;
+
+            }
+
+
+            document.getElementById(
+                "editSkills"
+            ).value =
+                skillsText;
+        }
+
+
+        // ============================================
+        // EDIT BUTTONS
+        // ============================================
+
+        function setupEditButtons() {
+
+            const editButton =
+                document.getElementById(
+                    "editProfileButton"
+                );
+
+
+            const editForm =
+                document.getElementById(
+                    "editForm"
+                );
+
+
+            const cancelButton =
+                document.getElementById(
+                    "cancelEditButton"
+                );
+
+
+            const saveButton =
+                document.getElementById(
+                    "saveProfileButton"
+                );
+
+
+            editButton.addEventListener(
+                "click",
+                function () {
+
+                    editForm.style.display =
+                        "block";
+
+                    editButton.style.display =
+                        "none";
+
+                }
+            );
+
+
+            cancelButton.addEventListener(
+                "click",
+                function () {
+
+                    fillEditForm(
+                        currentProfile
+                    );
+
+                    editForm.style.display =
+                        "none";
+
+                    editButton.style.display =
+                        "inline-block";
+
+                }
+            );
+
+
+            saveButton.addEventListener(
+                "click",
+                saveProfile
+            );
+        }
+
+
+        // ============================================
+        // SAVE PROFILE
+        // ============================================
+
+        async function saveProfile() {
+
+            const saveButton =
+                document.getElementById(
+                    "saveProfileButton"
+                );
+
+
+            saveButton.disabled = true;
+
+            saveButton.textContent =
+                "Saving...";
+
+
+            const fullName =
+                document.getElementById(
+                    "editFullName"
+                ).value.trim();
+
+
+            const city =
+                document.getElementById(
+                    "editCity"
+                ).value.trim();
+
+
+            const ageValue =
+                document.getElementById(
+                    "editAge"
+                ).value;
+
+
+            const availability =
+                document.getElementById(
+                    "editAvailability"
+                ).value.trim();
+
+
+            const skillsText =
+                document.getElementById(
+                    "editSkills"
+                ).value.trim();
+
+
+            let skillsValue = skillsText;
+
+
+            /*
+             * If existing skills are stored as an array,
+             * keep them as an array.
+             */
+            if (
+                currentProfile &&
+                Array.isArray(
+                    currentProfile.skills
+                )
+            ) {
+
+                skillsValue =
+                    skillsText
+                        .split(",")
+                        .map(
+                            skill => skill.trim()
+                        )
+                        .filter(
+                            skill => skill !== ""
+                        );
+            }
+
+
+            const {
+                data: { user },
+                error: authError
+            } = await supabaseClient.auth.getUser();
+
+
+            if (authError || !user) {
+
+                alert(
+                    "Please login first."
+                );
+
+                saveButton.disabled = false;
+
+                saveButton.textContent =
+                    "Save Changes";
+
+                return;
+            }
+
+
+            const updateData = {
+
+                full_name:
+                    fullName || null,
+
+                city:
+                    city || null,
+
+                age:
+                    ageValue
+                        ? Number(ageValue)
+                        : null,
+
+                availability:
+                    availability || null,
+
+                skills:
+                    skillsValue || null
+
+            };
+
+
+            console.log(
+                "Updating profile:",
+                updateData
+            );
+
+
+            const {
+                error: updateError
+            } = await supabaseClient
+                .from("profiles")
+                .update(updateData)
+                .eq("user_id", user.id);
+
+
+            if (updateError) {
+
+                console.error(
+                    "Profile update error:",
+                    updateError
+                );
+
+                alert(
+                    "Unable to update profile: " +
+                    updateError.message
+                );
+
+                saveButton.disabled = false;
+
+                saveButton.textContent =
+                    "Save Changes";
+
+                return;
+            }
+
+
+            // Reload profile from Supabase
+            const {
+                data: updatedProfile,
+                error: reloadError
+            } = await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+
+            if (reloadError) {
+
+                console.error(
+                    "Reload error:",
+                    reloadError
+                );
+
+                alert(
+                    "Profile updated, but page could not refresh."
+                );
+
+            }
+
+            else {
+
+                currentProfile =
+                    updatedProfile;
+
+                displayProfile(
+                    updatedProfile
+                );
+
+                fillEditForm(
+                    updatedProfile
+                );
+
+
+                document.getElementById(
+                    "successMessage"
+                ).style.display =
+                    "block";
+
+
+                setTimeout(
+                    function () {
+
+                        document.getElementById(
+                            "successMessage"
+                        ).style.display =
+                            "none";
+
+                    },
+                    3000
+                );
+            }
+
+
+            document.getElementById(
+                "editForm"
+            ).style.display =
+                "none";
+
+
+            document.getElementById(
+                "editProfileButton"
+            ).style.display =
+                "inline-block";
+
+
+            saveButton.disabled = false;
+
+            saveButton.textContent =
+                "Save Changes";
+        }
+document
+    .getElementById("logoutButton")
+    .addEventListener("click", async function (event) {
+
+        event.preventDefault();
+
+        const { error } =
+            await supabaseClient.auth.signOut();
+
+        if (error) {
+            console.error("Logout error:", error);
+            alert("Unable to logout.");
+            return;
+        }
+
+        window.location.href = "../auth.html";
     });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js"></script>
+    </script>
+
 </body>
+
 </html>

@@ -77,7 +77,7 @@
             </div>
 
 
-            <div class="opportunity-grid">
+            <div class="opportunity-grid" id="applicationsContainer">
 
             
             </div>
@@ -86,6 +86,7 @@
 
     </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../supabase-config.js"></script>
 <script src="../supabase-client.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
@@ -104,10 +105,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log("Logged-in Student ID:", user.id);
 
     // Get student's applications
-    const { data: applications, error } = await supabaseClient
-        .from("applications")
-        .select("*")
-        .eq("student_id", user.id);
+   const { data: applications, error } = await supabaseClient
+    .from("applications")
+    .select(`
+        *,
+        jobs (
+            title
+        )
+    `)
+    .eq("student_id", user.id);
 
     if (error) {
         console.error("Applications error:", error);
@@ -130,19 +136,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         card.className = "opportunity-card";
 
         card.innerHTML = `
-            <h3>Job ID: ${application.job_id}</h3>
+    <h3>💼 ${application.jobs?.title || "Opportunity"}</h3>
 
-            <p>📄 Application ID: ${application.id}</p>
+    <p>📄 Application ID: ${application.id}</p>
 
-            <p>📅 Applied: ${application.applied_at || "Not specified"}</p>
+    <p>📅 Applied: ${application.applied_at || "Not specified"}</p>
 
-            <span class="tag">${application.status || "Pending"}</span>
-        `;
+    <span class="tag">${application.status || "Pending"}</span>
+`;
 
         container.appendChild(card);
     });
 
 });
 </script>
+
 </body>
 </html>
