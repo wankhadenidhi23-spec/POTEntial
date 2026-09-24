@@ -1,348 +1,930 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Potential — Where Local Opportunities Meet Student Potential</title>
-<meta name="description" content="Potential connects students with local businesses, helping students discover meaningful work opportunities while helping businesses find motivated young talent.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>POTEntial - Connect. Work. Grow.</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
+
 <body>
 
-<a class="skip-link" href="#main">Skip to content</a>
+    <!-- ================= NAVBAR ================= -->
 
-<!-- NAVBAR -->
-<header class="navbar" id="navbar">
-  <div class="navbar__inner">
-    <a href="#top" class="brand">
-      <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 2c1.2 2.6 3.4 4.3 6.2 4.6-1 2.7-.8 5.6.9 7.9-2.7-.4-5.1.6-6.7 2.7-1.1-2.4-3.1-4-5.7-4.4 1.9-1.9 2.7-4.5 2.2-7.2C10.3 5.1 11.3 3.6 12 2z"/>
-        <circle cx="12" cy="19.5" r="2.3"/>
-      </svg>
-      Potential
-    </a>
+    <header class="navbar">
 
-    <nav class="nav-links" id="navLinks">
-      <a href="#top">Home</a>
-      <a href="#opportunities">Opportunities</a>
-      <a href="../auth.html">For Businesses</a>
-      <a href="../auth.html">For Students</a>
-    </nav>
+        <div class="navbar__inner">
 
-    <div class="navbar__actions">
-      <a href="#login" class="btn btn--ghost">Login</a>
-      <a href="#get-started" class="btn btn--primary">Sign Up</a>
-    </div>
+            <a href="#" class="brand">
+                POTEntial
+            </a>
 
-    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#top">Home</a>
-    <a href="#opportunities">Opportunities</a>
-    <a href="#why">For Businesses</a>
-    <a href="#">For Students</a>
-    <a href="#login">Login</a>
-    <a href="#get-started" class="btn btn--primary">Sign Up</a>
-  </div>
-</header>
+            <nav class="nav-links">
 
-<main id="main">
+                <a href="#home">Home</a>
 
-  <!-- HERO -->
-  <section class="hero" id="top">
-    <div class="hero__inner">
-      <div class="hero__copy">
-        <h1 class="hero__headline">
-          Real Opportunities.<br>
-          Local Businesses.<br>
-          Your <span class="accent-text">Potential.</span>
-        </h1>
-        <p class="hero__sub">
-          Connect with local businesses and find part-time jobs, internships and work opportunities that help you learn, grow and earn.
+                <a href="#businesses">
+                    Businesses
+                </a>
+
+                <a href="#how-it-works">
+                    How It Works
+                </a>
+
+                <a href="#about">
+                    About
+                </a>
+
+            </nav>
+
+
+            <div class="navbar__actions">
+
+                <a
+                    href="../auth.html"
+                    class="btn btn--ghost"
+                >
+                    Login
+                </a>
+
+                <a
+                    href="../auth.html"
+                    class="btn btn--primary"
+                >
+                    Get Started
+                </a>
+
+            </div>
+
+
+            <button
+                class="hamburger"
+                id="hamburger"
+                aria-label="Open menu"
+            >
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+        </div>
+
+
+        <!-- MOBILE MENU -->
+
+        <div
+            class="mobile-menu"
+            id="mobileMenu"
+        >
+
+            <a href="#home">Home</a>
+
+            <a href="#businesses">
+                Businesses
+            </a>
+
+            <a href="#how-it-works">
+                How It Works
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+            <hr>
+
+            <a href="../auth.html">
+                Login
+            </a>
+
+            <a href="../auth.html">
+                Get Started
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= HERO ================= -->
+
+    <main>
+
+        <section
+            class="hero"
+            id="home"
+        >
+
+            <div class="hero__inner">
+
+
+                <div class="hero__content">
+
+                    <p
+                        class="accent-text"
+                        style="font-weight:600; margin-bottom:12px;"
+                    >
+                        CONNECT. WORK. GROW.
+                    </p>
+
+
+                    <h1 class="hero__headline">
+
+                        Discover Opportunities.
+                        Build Your Potential.
+
+                    </h1>
+
+
+                    <p class="hero__sub">
+
+                        POTEntial connects students with local
+                        businesses, helping students discover
+                        meaningful opportunities and businesses
+                        find talented young people.
+
+                    </p>
+
+
+                    <div class="hero__actions">
+
+                        <a
+                            href="../auth.html"
+                            class="btn btn--primary btn--lg"
+                        >
+                            Find Opportunities
+                        </a>
+
+
+                        <a
+                            href="../auth.html"
+                            class="btn btn--outline btn--lg"
+                        >
+                            Post an Opportunity
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- HERO ILLUSTRATION -->
+
+                <div class="hero__visual">
+
+                    <svg
+                        class="student-illustration"
+                        viewBox="0 0 500 450"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-label="Student illustration"
+                    >
+
+                        <!-- Background -->
+
+                        <rect
+                            class="illus-backdrop"
+                            x="35"
+                            y="35"
+                            width="430"
+                            height="370"
+                            rx="80"
+                        />
+
+
+                        <!-- Decorative dots -->
+
+                        <circle
+                            class="illus-dot"
+                            cx="90"
+                            cy="100"
+                            r="9"
+                        />
+
+                        <circle
+                            class="illus-dot"
+                            cx="420"
+                            cy="120"
+                            r="7"
+                        />
+
+                        <circle
+                            class="illus-dot"
+                            cx="395"
+                            cy="350"
+                            r="10"
+                        />
+
+                        <circle
+                            class="illus-dot--outline"
+                            cx="100"
+                            cy="330"
+                            r="16"
+                        />
+
+
+                        <!-- Backpack -->
+
+                        <rect
+                            class="illus-backpack"
+                            x="100"
+                            y="205"
+                            width="90"
+                            height="125"
+                            rx="20"
+                        />
+
+                        <rect
+                            class="illus-backpack-flap"
+                            x="112"
+                            y="220"
+                            width="66"
+                            height="30"
+                            rx="12"
+                        />
+
+
+                        <!-- Body -->
+
+                        <path
+                            class="illus-body"
+                            d="M205 230
+                               C185 250 180 305 185 355
+                               L330 355
+                               C330 300 320 250 295 230
+                               Z"
+                        />
+
+
+                        <!-- Head -->
+
+                        <circle
+                            class="illus-head"
+                            cx="255"
+                            cy="150"
+                            r="50"
+                        />
+
+
+                        <!-- Hair -->
+
+                        <path
+                            class="illus-hair"
+                            d="M205 150
+                               C205 105 230 80 265 88
+                               C305 95 310 130 300 155
+                               C285 135 270 130 250 130
+                               C235 130 220 138 205 150
+                               Z"
+                        />
+
+
+                        <!-- Arm -->
+
+                        <path
+                            class="illus-arm"
+                            d="M285 245
+                               C330 255 350 275 375 300"
+                        />
+
+
+                        <!-- Laptop -->
+
+                        <rect
+                            class="illus-laptop-screen"
+                            x="295"
+                            y="265"
+                            width="120"
+                            height="82"
+                            rx="8"
+                        />
+
+                        <path
+                            class="illus-laptop-base"
+                            d="M280 347
+                               L430 347
+                               L450 365
+                               L260 365
+                               Z"
+                        />
+
+
+                        <!-- Laptop screen content -->
+
+                        <rect
+                            class="illus-backdrop"
+                            x="310"
+                            y="280"
+                            width="90"
+                            height="50"
+                            rx="5"
+                        />
+
+
+                        <!-- Plant -->
+
+                        <rect
+                            class="illus-pot"
+                            x="70"
+                            y="350"
+                            width="45"
+                            height="35"
+                            rx="7"
+                        />
+
+                        <path
+                            class="illus-leaf"
+                            d="M92 350
+                               C65 325 75 305 95 325
+                               C110 300 130 320 105 350
+                               Z"
+                        />
+
+                    </svg>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= TRUST BADGES ================= -->
+
+        <section class="trust-badges">
+
+            <div class="trust-badges__inner">
+
+
+                <div class="trust-badge">
+
+                    <div class="trust-badge__icon">
+                        🎓
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Built for Students
+                        </h3>
+
+                        <p>
+                            Discover opportunities that
+                            help you gain real experience.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="trust-badge">
+
+                    <div class="trust-badge__icon">
+                        🏢
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Local Businesses
+                        </h3>
+
+                        <p>
+                            Connect with businesses
+                            looking for young talent.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="trust-badge">
+
+                    <div class="trust-badge__icon">
+                        🚀
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Real Growth
+                        </h3>
+
+                        <p>
+                            Turn opportunities into
+                            experience and skills.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= ABOUT ================= -->
+
+        <section
+            class="section"
+            id="about"
+        >
+
+            <div class="section__inner">
+
+                <h2 class="section__title">
+                    Why POTEntial?
+                </h2>
+
+
+                <div class="feature-grid">
+
+
+                    <article class="feature-card">
+
+                        <div class="feature-card__icon">
+                            🔎
+                        </div>
+
+                        <h3>
+                            Discover
+                        </h3>
+
+                        <p>
+                            Find relevant opportunities
+                            from businesses around you.
+                        </p>
+
+                    </article>
+
+
+                    <article class="feature-card">
+
+                        <div class="feature-card__icon">
+                            🤝
+                        </div>
+
+                        <h3>
+                            Connect
+                        </h3>
+
+                        <p>
+                            Connect directly with businesses
+                            and explore real opportunities.
+                        </p>
+
+                    </article>
+
+
+                    <article class="feature-card">
+
+                        <div class="feature-card__icon">
+                            💡
+                        </div>
+
+                        <h3>
+                            Learn
+                        </h3>
+
+                        <p>
+                            Build practical skills through
+                            real-world experiences.
+                        </p>
+
+                    </article>
+
+
+                    <article class="feature-card">
+
+                        <div class="feature-card__icon">
+                            📈
+                        </div>
+
+                        <h3>
+                            Grow
+                        </h3>
+
+                        <p>
+                            Take the next step toward
+                            your professional future.
+                        </p>
+
+                    </article>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= HOW IT WORKS ================= -->
+
+        <section
+            class="section section--tinted"
+            id="how-it-works"
+        >
+
+            <div class="section__inner">
+
+                <h2 class="section__title">
+                    How It Works
+                </h2>
+
+
+                <div class="steps-columns">
+
+
+                    <!-- STUDENTS -->
+
+                    <div>
+
+                        <h3 class="steps-column__title">
+                            For Students
+                        </h3>
+
+
+                        <div class="steps-list">
+
+
+                            <div class="step">
+
+                                <div class="step__num">
+                                    01
+                                </div>
+
+                                <div>
+
+                                    <h4>
+                                        Create your profile
+                                    </h4>
+
+                                    <p>
+                                        Tell businesses about
+                                        your skills and interests.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="step">
+
+                                <div class="step__num">
+                                    02
+                                </div>
+
+                                <div>
+
+                                    <h4>
+                                        Browse opportunities
+                                    </h4>
+
+                                    <p>
+                                        Explore work opportunities
+                                        posted by businesses.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="step">
+
+                                <div class="step__num">
+                                    03
+                                </div>
+
+                                <div>
+
+                                    <h4>
+                                        Apply
+                                    </h4>
+
+                                    <p>
+                                        Apply for opportunities
+                                        that interest you.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- BUSINESSES -->
+
+                    <div>
+
+                        <h3 class="steps-column__title">
+                            For Businesses
+                        </h3>
+
+
+                        <div class="steps-list">
+
+
+                            <div class="step">
+
+                                <div class="step__num">
+                                    01
+                                </div>
+
+                                <div>
+
+                                    <h4>
+                                        Create your business profile
+                                    </h4>
+
+                                    <p>
+                                        Tell students about your
+                                        business and opportunities.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="step">
+
+                                <div class="step__num">
+                                    02
+                                </div>
+
+                                <div>
+
+                                    <h4>
+                                        Post an opportunity
+                                    </h4>
+
+                                    <p>
+                                        Share work opportunities
+                                        with students.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="step">
+
+                                <div class="step__num">
+                                    03
+                                </div>
+
+                                <div>
+
+                                    <h4>
+                                        Find talent
+                                    </h4>
+
+                                    <p>
+                                        Discover students who
+                                        match your requirements.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= FEATURED BUSINESSES ================= -->
+
+        <section
+            class="section"
+            id="businesses"
+        >
+
+            <div class="section__inner">
+
+
+                <div class="section__header-row">
+
+                    <h2 class="section__title">
+                        Featured Businesses
+                    </h2>
+
+                    <span class="text-link">
+                        Local businesses
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="opportunity-grid"
+                    id="businessGrid"
+                >
+
+                    <div class="opportunity-empty">
+                        Loading businesses...
+                    </div>
+
+                </div>
+
+
+                <p class="opportunity-disclaimer">
+                    
+                </p>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= TWO SIDED VALUE ================= -->
+
+        <section class="split-value">
+
+
+            <div class="split-value__side split-value__side--student">
+
+                <h3>
+                    Students, your next opportunity is waiting.
+                </h3>
+
+                <p>
+                    Discover local work opportunities,
+                    gain experience and build your future.
+                </p>
+
+                <a
+                    href="../auth.html"
+                    class="btn btn--outline-light"
+                >
+                    Join as Student
+                </a>
+
+            </div>
+
+
+
+            <div class="split-value__side split-value__side--business">
+
+                <h3>
+                    Businesses, find your next talent.
+                </h3>
+
+                <p>
+                    Post opportunities and connect with
+                    motivated students.
+                </p>
+
+                <a
+                    href="../auth.html"
+                    class="btn btn--outline"
+                >
+                    Join as Business
+                </a>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================= FINAL CTA ================= -->
+
+        <section class="final-cta">
+
+            <div class="final-cta__inner">
+
+                <h2>
+                    Your potential starts here.
+                </h2>
+
+                <p>
+                    Connect. Work. Grow.
+                    Take your next step with POTEntial.
+                </p>
+
+
+                <div class="final-cta__actions">
+
+                    <a
+                        href="../auth.html"
+                        class="btn btn--primary btn--lg"
+                    >
+                        Get Started
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="footer__inner">
+
+
+            <div>
+
+                <div class="footer__logo">
+                    POTEntial
+                </div>
+
+                <p class="footer__tagline">
+                    Connect. Work. Grow.
+                </p>
+
+            </div>
+
+
+            <div class="footer__links">
+
+                <a href="#home">
+                    Home
+                </a>
+
+                <a href="#businesses">
+                    Businesses
+                </a>
+
+                <a href="#how-it-works">
+                    How It Works
+                </a>
+
+            </div>
+
+
+            <div class="footer__legal">
+
+                <a href="#about">
+                    About
+                </a>
+
+                <a href="../auth.html">
+                    Login
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <p class="footer__copyright">
+            © 2026 POTEntial. All rights reserved.
         </p>
-        <div class="hero__actions">
-          <a href="#get-started" class="btn btn--primary btn--lg">Get Started</a>
-          <a href="#why" class="btn btn--outline btn--lg">Learn More</a>
-        </div>
-      </div>
 
-      <div class="hero__visual" aria-hidden="true">
-        <svg viewBox="0 0 480 460" class="student-illustration" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="260" cy="230" r="190" class="illus-backdrop" />
+    </footer>
 
-          <!-- backpack -->
-          <rect x="330" y="255" width="78" height="98" rx="18" class="illus-backpack" />
-          <rect x="352" y="240" width="34" height="30" rx="10" class="illus-backpack-flap" />
 
-          <!-- plant -->
-          <rect x="70" y="300" width="46" height="54" rx="8" class="illus-pot" />
-          <path d="M93 300c0-26-22-40-40-42 4 24 16 38 40 42z" class="illus-leaf" />
-          <path d="M93 300c0-30 24-46 46-48-4 26-20 42-46 48z" class="illus-leaf" />
 
-          <!-- seated figure -->
-          <path d="M150 380c10-58 46-96 98-96s88 38 98 96z" class="illus-body" />
-          <circle cx="248" cy="196" r="46" class="illus-head" />
-          <path d="M204 186c2-30 24-50 44-50s42 20 44 50c-14-8-30-4-44 4-14-8-30-12-44-4z" class="illus-hair" />
+    <script src="script.js"></script>
 
-          <!-- laptop -->
-          <g class="illus-laptop">
-            <rect x="205" y="300" width="86" height="56" rx="6" class="illus-laptop-screen" />
-            <rect x="195" y="352" width="106" height="10" rx="4" class="illus-laptop-base" />
-          </g>
-
-          <!-- arms -->
-          <path d="M180 330c-10 10-16 22-14 36" class="illus-arm" />
-          <path d="M316 330c10 10 16 22 14 36" class="illus-arm" />
-
-          <!-- floating dots -->
-          <circle cx="120" cy="120" r="7" class="illus-dot" />
-          <circle cx="400" cy="150" r="5" class="illus-dot" />
-          <circle cx="380" cy="90" r="9" class="illus-dot illus-dot--outline" />
-        </svg>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRUST BADGES -->
-  <section class="trust-badges">
-    <div class="trust-badges__inner">
-      <div class="trust-badge">
-        <span class="trust-badge__icon" aria-hidden="true">🛡️</span>
-        <div>
-          <h3>Verified Businesses</h3>
-          <p>Work with trusted local businesses</p>
-        </div>
-      </div>
-      <div class="trust-badge">
-        <span class="trust-badge__icon" aria-hidden="true">🗂️</span>
-        <div>
-          <h3>Flexible Opportunities</h3>
-          <p>Part-time, freelance, internships &amp; more</p>
-        </div>
-      </div>
-      <div class="trust-badge">
-        <span class="trust-badge__icon" aria-hidden="true">🚀</span>
-        <div>
-          <h3>Build Your Future</h3>
-          <p>Gain experience and boost your career</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHY POTENTIAL -->
-  <section class="section" id="why">
-    <div class="section__inner">
-      <h2 class="section__title">Why Potential</h2>
-
-      <div class="feature-grid">
-        <article class="feature-card">
-          <span class="feature-card__icon" aria-hidden="true">🎓</span>
-          <h3>For Students</h3>
-          <p>Discover internships, part-time work, projects and other opportunities from local businesses.</p>
-        </article>
-
-        <article class="feature-card">
-          <span class="feature-card__icon" aria-hidden="true">🏪</span>
-          <h3>For Businesses</h3>
-          <p>Find motivated students who can contribute to real business needs.</p>
-        </article>
-
-        <article class="feature-card">
-          <span class="feature-card__icon" aria-hidden="true">🛠️</span>
-          <h3>Real-World Experience</h3>
-          <p>Students can build practical skills and experience beyond the classroom.</p>
-        </article>
-
-        <article class="feature-card">
-          <span class="feature-card__icon" aria-hidden="true">📍</span>
-          <h3>Local Connections</h3>
-          <p>Make it easier for students and businesses to connect within their community.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="section section--tinted" id="how-it-works">
-    <div class="section__inner">
-      <h2 class="section__title">How it works</h2>
-
-      <div class="steps-columns">
-        <div class="steps-column">
-          <h3 class="steps-column__title">For students</h3>
-          <ol class="steps-list">
-            <li class="step">
-              <span class="step__num">01</span>
-              <div>
-                <h4>Create your profile</h4>
-                <p>Build a profile with your skills, interests and education.</p>
-              </div>
-            </li>
-            <li class="step">
-              <span class="step__num">02</span>
-              <div>
-                <h4>Discover opportunities</h4>
-                <p>Browse opportunities posted by local businesses.</p>
-              </div>
-            </li>
-            <li class="step">
-              <span class="step__num">03</span>
-              <div>
-                <h4>Apply</h4>
-                <p>Apply to opportunities that match your skills and interests.</p>
-              </div>
-            </li>
-          </ol>
-        </div>
-
-        <div class="steps-column">
-          <h3 class="steps-column__title">For businesses</h3>
-          <ol class="steps-list">
-            <li class="step">
-              <span class="step__num">01</span>
-              <div>
-                <h4>Create your business profile</h4>
-                <p>Introduce your business and what you are looking for.</p>
-              </div>
-            </li>
-            <li class="step">
-              <span class="step__num">02</span>
-              <div>
-                <h4>Post an opportunity</h4>
-                <p>Describe the role, requirements and opportunity details.</p>
-              </div>
-            </li>
-            <li class="step">
-              <span class="step__num">03</span>
-              <div>
-                <h4>Connect with students</h4>
-                <p>Review suitable applicants and connect with potential candidates.</p>
-              </div>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OPPORTUNITIES PREVIEW -->
-  <section class="section" id="opportunities">
-    <div class="section__inner">
-      <div class="section__header-row">
-        <h2 class="section__title">Explore opportunities</h2>
-        <a href="#" class="text-link" id="viewAllLink">View all opportunities</a>
-      </div>
-
-      <!--
-        This grid is populated live from Supabase by script.js (loadOpportunities()).
-        The cards below are fallback/demo content: shown immediately on load,
-        then replaced once real data arrives. If the Supabase fetch fails
-        (e.g. config not filled in yet), these demo cards stay visible.
-      -->
-      <div class="opportunity-grid" id="opportunityGrid" aria-live="polite">
-        <article class="opportunity-card" data-type="Part-time">
-          <div class="opportunity-card__top">
-            <span class="opportunity-card__badge">Part-time</span>
-          </div>
-          <h3>Social Media Intern</h3>
-          <p class="opportunity-card__business">Local Business</p>
-          <p class="opportunity-card__meta">Nagpur · ₹5,000/month</p>
-        </article>
-
-        <article class="opportunity-card" data-type="Flexible">
-          <div class="opportunity-card__top">
-            <span class="opportunity-card__badge">Flexible</span>
-          </div>
-          <h3>Web Development Intern</h3>
-          <p class="opportunity-card__business">Local Startup</p>
-          <p class="opportunity-card__meta">Nagpur</p>
-        </article>
-
-        <article class="opportunity-card" data-type="Part-time">
-          <div class="opportunity-card__top">
-            <span class="opportunity-card__badge">Part-time</span>
-          </div>
-          <h3>Graphic Design Assistant</h3>
-          <p class="opportunity-card__business">Local Agency</p>
-          <p class="opportunity-card__meta">Nagpur</p>
-        </article>
-
-        <article class="opportunity-card" data-type="Project">
-          <div class="opportunity-card__top">
-            <span class="opportunity-card__badge">Project</span>
-          </div>
-          <h3>Event Support Assistant</h3>
-          <p class="opportunity-card__business">Local Organiser</p>
-          <p class="opportunity-card__meta">Nagpur</p>
-        </article>
-      </div>
-
-      <p class="opportunity-disclaimer">These are example listings to show how opportunities will appear — not real postings.</p>
-    </div>
-  </section>
-
-  <!-- TWO-SIDED VALUE -->
-  <section class="split-value">
-    <div class="split-value__side split-value__side--student">
-      <h3>Your skills deserve an opportunity.</h3>
-      <p>Find work that helps you learn, grow and gain real experience.</p>
-      <a href="#opportunities" class="btn btn--outline-light">Explore Opportunities</a>
-    </div>
-    <div class="split-value__side split-value__side--business">
-      <h3>Find the talent your business needs.</h3>
-      <p>Connect with motivated students and discover fresh talent.</p>
-      <a href="#post-opportunity" class="btn btn--outline">Post an Opportunity</a>
-    </div>
-  </section>
-
-  <!-- FINAL CTA -->
-  <section class="final-cta" id="get-started">
-    <div class="final-cta__inner">
-      <h2>Ready to discover what Potential can do for you?</h2>
-      <p>Whether you're looking for your next opportunity or your next young talent, Potential helps you make the connection.</p>
-      <div class="final-cta__actions">
-        <a href="#" class="btn btn--primary btn--lg">I'm a Student</a>
-        <a href="#" class="btn btn--outline btn--lg">I'm a Business</a>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="footer" id="about">
-  <div class="footer__inner">
-    <div class="footer__brand">
-      <p class="footer__logo">Potential</p>
-      <p class="footer__tagline">Connecting students with local opportunities.</p>
-    </div>
-
-    <nav class="footer__links" aria-label="Footer">
-      <a href="#top">Home</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#opportunities">Opportunities</a>
-      <a href="#about">About</a>
-      <a href="#login">Login</a>
-    </nav>
-
-    <nav class="footer__legal" aria-label="Legal">
-      <a href="#privacy">Privacy Policy</a>
-      <a href="#terms">Terms</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </div>
-  <p class="footer__copyright">© 2026 Potential. All rights reserved.</p>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-<script src="script.js"></script>
 </body>
+
 </html>
