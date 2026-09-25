@@ -26,9 +26,20 @@ jobs:
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Prepare landing page
+      - name: Prepare website
         run: |
           mkdir _site
+
+          # Copy the whole project
+          cp -R "BUSINESS DASHBOARD" "_site/BUSINESS DASHBOARD"
+          cp -R "student dashboard" "_site/student dashboard"
+
+          # Copy root files
+          cp auth.html _site/
+          cp supabase-client.js _site/
+          cp supabase-config.js _site/
+
+          # Put landing page at website root
           cp -R "landing page"/. _site/
 
       - name: Upload website
