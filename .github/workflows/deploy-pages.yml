@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 permissions:
@@ -20,33 +21,85 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Get repository files
+
+      # ==========================================
+      # 1. GET FILES FROM REPOSITORY
+      # ==========================================
+      - name: Checkout repository
         uses: actions/checkout@v6
 
+
+      # ==========================================
+      # 2. SETUP GITHUB PAGES
+      # ==========================================
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
+
+      # ==========================================
+      # 3. PREPARE WEBSITE
+      # ==========================================
       - name: Prepare website
         run: |
-          mkdir _site
 
-          # Copy the whole project
-          cp -R "BUSINESS DASHBOARD" "_site/BUSINESS DASHBOARD"
-          cp -R "student dashboard" "_site/student dashboard"
+          # Create deployment folder
+          mkdir -p _site
 
-          # Copy root files
-          cp auth.html _site/
-          cp supabase-client.js _site/
-          cp supabase-config.js _site/
 
-          # Put landing page at website root
+          # ======================================
+          # LANDING PAGE
+          # ======================================
           cp -R "landing page"/. _site/
 
+
+          # ======================================
+          # AUTHENTICATION PAGE
+          # ======================================
+          cp "auth.html" "_site/auth.html"
+
+
+          # ======================================
+          # ROOT SUPABASE FILES
+          # ======================================
+          cp "supabase-client.js" "_site/supabase-client.js"
+
+          cp "supabase-config.js" "_site/supabase-config.js"
+
+
+          # ======================================
+          # STUDENT DASHBOARD
+          # ======================================
+          cp -R "student dashboard" "_site/student dashboard"
+
+
+          # ======================================
+          # BUSINESS DASHBOARD
+          # ======================================
+          cp -R "BUSINESS DASHBOARD" "_site/BUSINESS DASHBOARD"
+
+
+          # ======================================
+          # SHOW DEPLOYMENT FILES
+          # ======================================
+          echo "=========================================="
+          echo "FILES BEING DEPLOYED:"
+          echo "=========================================="
+
+          find _site -maxdepth 3 -type f | sort
+
+
+      # ==========================================
+      # 4. UPLOAD WEBSITE
+      # ==========================================
       - name: Upload website
         uses: actions/upload-pages-artifact@v4
         with:
           path: "_site"
 
+
+      # ==========================================
+      # 5. DEPLOY WEBSITE
+      # ==========================================
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
