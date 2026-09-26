@@ -131,7 +131,7 @@ async function postOpportunity(e) {
   $("opportunityForm").reset();
   showMessage("Opportunity posted successfully!", "success");
 
-  loadMyJobs();
+  await loadMyJobs();
 }
 
 /* ---------------- MY JOBS ---------------- */
@@ -140,6 +140,8 @@ async function loadMyJobs() {
   if (!currentBusiness) return;
 
   const container = $("jobsContainer");
+
+  if (!container) return;
 
   container.innerHTML =
     "<p class='loading'>Loading opportunities...</p>";
@@ -151,14 +153,18 @@ async function loadMyJobs() {
     .order("created_at", { ascending: false });
 
   if (error) {
+    console.error(error);
+
     container.innerHTML =
       "<p>Unable to load opportunities.</p>";
+
     return;
   }
 
-  if (!jobs.length) {
+  if (!jobs || !jobs.length) {
     container.innerHTML =
       "<p>No opportunities posted yet.</p>";
+
     return;
   }
 
@@ -166,6 +172,7 @@ async function loadMyJobs() {
 
   jobs.forEach((job) => {
     const card = document.createElement("div");
+
     card.className = "job-card";
 
     card.innerHTML = `
@@ -188,15 +195,17 @@ async function loadMyJobs() {
 
 /* ---------------- APPLICATIONS ---------------- */
 
-/* ---------------- APPLICATIONS ---------------- */
-
 async function loadApplications() {
   const container = $("applicationsContainer");
 
   if (!container) return;
 
+  if (!currentBusiness) return;
+
   container.innerHTML =
     "<p class='loading'>Loading applications...</p>";
+
+  /* GET BUSINESS JOBS */
 
   const { data: jobs, error: jobsError } =
     await supabaseClient
@@ -206,77 +215,100 @@ async function loadApplications() {
 
   if (jobsError) {
     console.error(jobsError);
+
     container.innerHTML =
       "<p>Unable to load opportunities.</p>";
+
     return;
   }
 
-  if (!jobs.length) {
+  if (!jobs || !jobs.length) {
     container.innerHTML =
       "<p>No opportunities posted yet.</p>";
+
     return;
   }
 
-  const jobIds = jobs.map((j) => j.id);
+  const jobIds = jobs.map((job) => job.id);
 
-  const { data: applications, error } =
+  /* GET APPLICATIONS */
+
+  const { data: applications, error: applicationsError } =
     await supabaseClient
       .from("applications")
       .select("*")
       .in("job_id", jobIds)
       .order("applied_at", { ascending: false });
 
-  if (error) {
-    console.error(error);
+  if (applicationsError) {
+    console.error(applicationsError);
+
     container.innerHTML =
       "<p>Unable to load applications.</p>";
+
     return;
   }
-if (!applications.length) {
-  container.innerHTML =
-    "<p>No students have applied yet.</p>";
-  return;
-}
 
+  if (!applications || !applications.length) {
+    container.innerHTML =
+      "<p>No students have applied yet.</p>";
 
-/* GET STUDENT NAMES */
+    return;
+  }
 
-const studentIds = applications.map(
-  (app) => app.student_id
-);
+  /* GET STUDENT IDS */
 
-const { data: students, error: studentsError } =
-  await supabaseClient
-    .from("profiles")
-    .select("user_id, full_name")
-    .in("user_id", studentIds);
-
-if (studentsError) {
-  console.error(studentsError);
-}
-
-container.innerHTML = "";
-
-
-
- applications.forEach((app) => {
-  const job = jobs.find((j) => j.id === app.job_id);
-
-  const student = students?.find(
-    (s) => s.user_id === app.student_id
+  const studentIds = applications.map(
+    (app) => app.student_id
   );
 
-  const studentName =
-    student?.full_name || "Student";
+  /* GET STUDENT NAMES FROM PROFILES */
 
-  const status = (app.status || "pending").toLowerCase();
+  const { data: students, error: studentsError } =
+    await supabaseClient
+      .from("profiles")
+      .select("user_id, full_name")
+      .in("user_id", studentIds);
 
-    const card = document.createElement("div");
+  if (studentsError) {
+    console.error("Student profile error:", studentsError);
+  }
+
+  container.innerHTML = "";
+
+  /* DISPLAY APPLICATIONS */
+
+  applications.forEach((app) => {
+
+    const job = jobs.find(
+      (j) => j.id === app.job_id
+    );
+
+    /* FIND THE STUDENT PROFILE */
+
+    const student = students?.find(
+      (s) => s.user_id === app.student_id
+    );
+
+    /* GET STUDENT NAME */
+
+    const studentName =
+      student?.full_name || "Student";
+
+    const status =
+      (app.status || "pending").toLowerCase();
+
+    const card =
+      document.createElement("div");
+
     card.className = "job-card";
 
     let actionButtons = "";
 
+    /* PENDING */
+
     if (status === "pending") {
+
       actionButtons = `
         <div class="job-actions">
 
@@ -294,31 +326,56 @@ container.innerHTML = "";
 
         </div>
       `;
-    } else if (status === "accepted") {
+
+    }
+
+    /* ACCEPTED */
+
+    else if (status === "accepted") {
+
       actionButtons = `
         <div class="job-actions">
-          <button class="post-btn" disabled>
+
+          <button
+            class="post-btn"
+            disabled>
             Accepted
           </button>
+
         </div>
       `;
-    } else if (status === "rejected") {
+
+    }
+
+    /* REJECTED */
+
+    else if (status === "rejected") {
+
       actionButtons = `
         <div class="job-actions">
-          <button class="logout-btn" disabled>
+
+          <button
+            class="logout-btn"
+            disabled>
             Rejected
           </button>
+
         </div>
       `;
     }
 
+    /* APPLICATION CARD */
+
     card.innerHTML = `
-      <h3>${escapeHtml(job?.title || "Opportunity")}</h3>
+
+      <h3>
+        ${escapeHtml(job?.title || "Opportunity")}
+      </h3>
 
       <p>
-  <strong>Student:</strong>
-  ${escapeHtml(studentName)}
-</p>
+        <strong>Student:</strong>
+        ${escapeHtml(studentName)}
+      </p>
 
       <p>
         <strong>Status:</strong>
@@ -335,14 +392,14 @@ container.innerHTML = "";
       </p>
 
       ${actionButtons}
+
     `;
 
     container.appendChild(card);
   });
 }
 
-
-/* ---------------- UPDATE STATUS ---------------- */
+/* ---------------- UPDATE APPLICATION STATUS ---------------- */
 
 async function updateApplicationStatus(id, status) {
 
@@ -364,7 +421,12 @@ async function updateApplicationStatus(id, status) {
 
   if (error) {
     console.error(error);
-    alert("Unable to update application: " + error.message);
+
+    alert(
+      "Unable to update application: " +
+      error.message
+    );
+
     return;
   }
 
@@ -374,43 +436,63 @@ async function updateApplicationStatus(id, status) {
 /* ---------------- LOGOUT ---------------- */
 
 async function logout() {
+
   await supabaseClient.auth.signOut();
+
   window.location.href = "auth.html";
 }
 
-/* ---------------- START ---------------- */
+/* ---------------- START DASHBOARD ---------------- */
 
 async function startDashboard() {
+
   const ok = await loadBusiness();
 
   if (!ok) return;
 
   await loadMyJobs();
+
   await loadApplications();
 }
 
 /* ---------------- EVENTS ---------------- */
 
-$("opportunityForm").addEventListener(
-  "submit",
-  postOpportunity
-);
+if ($("opportunityForm")) {
 
-$("refreshJobs").addEventListener(
-  "click",
-  loadMyJobs
-);
+  $("opportunityForm").addEventListener(
+    "submit",
+    postOpportunity
+  );
+
+}
+
+if ($("refreshJobs")) {
+
+  $("refreshJobs").addEventListener(
+    "click",
+    loadMyJobs
+  );
+
+}
 
 if ($("refreshApplications")) {
+
   $("refreshApplications").addEventListener(
     "click",
     loadApplications
   );
+
 }
 
-$("logoutBtn").addEventListener(
-  "click",
-  logout
-);
+if ($("logoutBtn")) {
+
+  $("logoutBtn").addEventListener(
+    "click",
+    logout
+  );
+
+}
+
+/* ---------------- RUN ---------------- */
 
 startDashboard();
