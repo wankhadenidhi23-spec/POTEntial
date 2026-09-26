@@ -257,7 +257,7 @@ if (studentsError) {
 
 container.innerHTML = "";
 
-  container.innerHTML = "";
+
 
  applications.forEach((app) => {
   const job = jobs.find((j) => j.id === app.job_id);
@@ -316,9 +316,9 @@ container.innerHTML = "";
       <h3>${escapeHtml(job?.title || "Opportunity")}</h3>
 
       <p>
-        <strong>Student ID:</strong>
-        ${escapeHtml(app.student_id)}
-      </p>
+  <strong>Student:</strong>
+  ${escapeHtml(studentName)}
+</p>
 
       <p>
         <strong>Status:</strong>
