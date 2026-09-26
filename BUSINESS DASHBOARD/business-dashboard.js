@@ -188,6 +188,8 @@ async function loadMyJobs() {
 
 /* ---------------- APPLICATIONS ---------------- */
 
+/* ---------------- APPLICATIONS ---------------- */
+
 async function loadApplications() {
   const container = $("applicationsContainer");
 
@@ -203,6 +205,7 @@ async function loadApplications() {
       .eq("business_id", currentBusiness.id);
 
   if (jobsError) {
+    console.error(jobsError);
     container.innerHTML =
       "<p>Unable to load opportunities.</p>";
     return;
@@ -241,56 +244,106 @@ async function loadApplications() {
   applications.forEach((app) => {
     const job = jobs.find((j) => j.id === app.job_id);
 
+    const status = (app.status || "pending").toLowerCase();
+
     const card = document.createElement("div");
     card.className = "job-card";
+
+    let actionButtons = "";
+
+    if (status === "pending") {
+      actionButtons = `
+        <div class="job-actions">
+
+          <button
+            class="post-btn"
+            onclick="updateApplicationStatus('${app.id}', 'accepted')">
+            Accept
+          </button>
+
+          <button
+            class="logout-btn"
+            onclick="updateApplicationStatus('${app.id}', 'rejected')">
+            Reject
+          </button>
+
+        </div>
+      `;
+    } else if (status === "accepted") {
+      actionButtons = `
+        <div class="job-actions">
+          <button class="post-btn" disabled>
+            Accepted
+          </button>
+        </div>
+      `;
+    } else if (status === "rejected") {
+      actionButtons = `
+        <div class="job-actions">
+          <button class="logout-btn" disabled>
+            Rejected
+          </button>
+        </div>
+      `;
+    }
 
     card.innerHTML = `
       <h3>${escapeHtml(job?.title || "Opportunity")}</h3>
 
-      <p><strong>Student ID:</strong> ${escapeHtml(app.student_id)}</p>
+      <p>
+        <strong>Student ID:</strong>
+        ${escapeHtml(app.student_id)}
+      </p>
 
-      <p><strong>Status:</strong> ${escapeHtml(app.status)}</p>
+      <p>
+        <strong>Status:</strong>
+        ${escapeHtml(status)}
+      </p>
 
-      <p><strong>Applied:</strong>
-      ${
-        app.applied_at
-          ? new Date(app.applied_at).toLocaleDateString()
-          : "-"
-      }</p>
+      <p>
+        <strong>Applied:</strong>
+        ${
+          app.applied_at
+            ? new Date(app.applied_at).toLocaleDateString()
+            : "-"
+        }
+      </p>
 
-      <div class="job-actions">
-
-        <button class="post-btn"
-          onclick="updateApplicationStatus(${app.id},'Accepted')">
-          Accept
-        </button>
-
-        <button class="logout-btn"
-          onclick="updateApplicationStatus(${app.id},'Rejected')">
-          Reject
-        </button>
-
-      </div>
+      ${actionButtons}
     `;
 
     container.appendChild(card);
   });
 }
 
+
 /* ---------------- UPDATE STATUS ---------------- */
 
 async function updateApplicationStatus(id, status) {
-  const { error } = await supabaseClient
-    .from("applications")
-    .update({ status })
-    .eq("id", id);
 
-  if (error) {
-    alert(error.message);
+  const confirmMessage =
+    status === "accepted"
+      ? "Are you sure you want to accept this student?"
+      : "Are you sure you want to reject this student?";
+
+  if (!confirm(confirmMessage)) {
     return;
   }
 
-  loadApplications();
+  const { error } = await supabaseClient
+    .from("applications")
+    .update({
+      status: status
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Unable to update application: " + error.message);
+    return;
+  }
+
+  await loadApplications();
 }
 
 /* ---------------- LOGOUT ---------------- */
