@@ -55,10 +55,10 @@
         <header class="topbar">
             <h2>My Applications</h2>
 
-            <div class="profile">
-                <div class="profile-icon">S</div>
-                <span>Student</span>
-            </div>
+            <div class="user-info">
+    <div class="user-avatar" id="userAvatar">S</div>
+    <span id="userName">Student</span>
+</div>
         </header>
 
 
@@ -150,6 +150,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 });
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="my-applications.js"></script>
 </body>
 </html>
