@@ -134,10 +134,22 @@
         </div>
       </section>
 
-      <section class="placeholder-section" id="applicants">
-        <h2>Applicants</h2>
-        <p>This section is reserved for the existing applications/applicants table. No new database schema is created by this frontend.</p>
-      </section>
+      <section class="applicants-section" id="applicants">
+  <div class="section-heading">
+    <div>
+      <h2>Applicants</h2>
+      <p>Students who applied for your opportunities.</p>
+    </div>
+
+    <button id="refreshApplicants" class="refresh-btn">
+      Refresh
+    </button>
+  </div>
+
+  <div id="applicantsContainer">
+    <p class="loading">Loading applicants...</p>
+  </div>
+</section>
     </main>
   </div>
 

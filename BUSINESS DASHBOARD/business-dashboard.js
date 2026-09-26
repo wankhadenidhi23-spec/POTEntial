@@ -212,9 +212,157 @@ $("logoutBtn").addEventListener("click", async () => {
 });
 
 async function startDashboard() {
+
   const loaded = await loadBusiness();
+
   if (!loaded) return;
+
   await loadMyJobs();
+
+  await loadApplicants();
+}
+}
+async function loadApplicants() {
+  const container = $("applicantsContainer");
+
+  if (!container) return;
+
+  container.innerHTML =
+    '<p class="loading">Loading applicants...</p>';
+
+  if (!currentBusiness) {
+    container.innerHTML =
+      "<p>Business information not found.</p>";
+    return;
+  }
+
+  try {
+
+    // Get jobs posted by the current business
+    const { data: jobs, error: jobsError } =
+      await supabaseClient
+        .from("jobs")
+        .select("id, title")
+        .eq("business_id", currentBusiness.id);
+
+    if (jobsError) {
+      console.error("Jobs error:", jobsError);
+      container.innerHTML =
+        "<p>Unable to load your opportunities.</p>";
+      return;
+    }
+
+    if (!jobs || jobs.length === 0) {
+      container.innerHTML =
+        "<p>No opportunities posted yet.</p>";
+      return;
+    }
+
+    const jobIds = jobs.map(job => job.id);
+
+    /*
+      APPLICATIONS TABLE
+
+      IMPORTANT:
+      Change these column names ONLY if your
+      applications table uses different names.
+    */
+
+    const { data: applications, error: applicationsError } =
+      await supabaseClient
+        .from("applications")
+        .select("*")
+        .in("job_id", jobIds)
+        .order("created_at", { ascending: false });
+
+    if (applicationsError) {
+      console.error(
+        "Applications error:",
+        applicationsError
+      );
+
+      container.innerHTML =
+        "<p>Unable to load applicants.</p>";
+
+      return;
+    }
+
+    if (!applications || applications.length === 0) {
+      container.innerHTML =
+        "<p>No students have applied yet.</p>";
+      return;
+    }
+
+    container.innerHTML = "";
+
+    applications.forEach(application => {
+
+      const job = jobs.find(
+        j => j.id === application.job_id
+      );
+
+      const card = document.createElement("div");
+
+      card.className = "applicant-card";
+
+      card.innerHTML = `
+        <div class="applicant-info">
+
+          <h3>
+            ${escapeHtml(
+              application.student_name || "Student"
+            )}
+          </h3>
+
+          <p>
+            <strong>Opportunity:</strong>
+            ${escapeHtml(
+              job ? job.title : "Unknown Opportunity"
+            )}
+          </p>
+
+          <p>
+            <strong>Email:</strong>
+            ${escapeHtml(
+              application.student_email || "Not available"
+            )}
+          </p>
+
+          <p>
+            <strong>Applied On:</strong>
+            ${
+              application.created_at
+                ? new Date(
+                    application.created_at
+                  ).toLocaleDateString()
+                : "Not available"
+            }
+          </p>
+
+          <p>
+            <strong>Status:</strong>
+            ${escapeHtml(
+              application.status || "Pending"
+            )}
+          </p>
+
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+
+    console.error("Applicant loading error:", error);
+
+    container.innerHTML =
+      "<p>Something went wrong while loading applicants.</p>";
+  }
+  $("refreshApplicants").addEventListener(
+  "click",
+  loadApplicants
+);
 }
 
 startDashboard();

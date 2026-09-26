@@ -741,3 +741,148 @@ body {
             center;
     }
 }
+/* =========================
+   APPLICANTS
+========================= */
+
+.applicants-section {
+    margin-top: 25px;
+    padding: 28px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(65, 72, 133, 0.07);
+}
+
+.applicants-section .section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.applicants-section h2 {
+    margin: 0 0 5px;
+    font-size: 21px;
+}
+
+.applicants-section p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+
+/* Applicant Card */
+
+.applicant-card {
+    padding: 20px;
+    margin-top: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #f9f8ff,
+        #f5f8ff
+    );
+
+    border: 1px solid #e1e3f2;
+    border-radius: 15px;
+
+    transition: 0.2s ease;
+}
+
+.applicant-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(80, 85, 150, 0.10);
+}
+
+
+.applicant-info h3 {
+    margin: 0 0 12px;
+
+    color: var(--text);
+    font-size: 17px;
+}
+
+
+.applicant-info p {
+    margin: 7px 0;
+
+    color: #686d8c;
+    font-size: 13px;
+}
+
+
+.applicant-info strong {
+    color: #3f4465;
+}
+
+
+/* Status */
+
+.applicant-info p:last-child {
+    display: inline-block;
+
+    margin-top: 12px;
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    background: #eeeaff;
+    color: #5b4fd0;
+
+    font-weight: 700;
+}
+
+
+/* Refresh Button */
+
+.refresh-btn {
+    border: 1px solid #dedff0;
+
+    background: #f3f2ff;
+
+    color: #554ac8;
+
+    padding: 9px 15px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    transition: 0.2s ease;
+}
+
+.refresh-btn:hover {
+    background: #e9e7ff;
+    transform: translateY(-1px);
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .applicants-section {
+        padding: 20px;
+    }
+
+    .applicants-section .section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .refresh-btn {
+        width: 100%;
+    }
+
+    .applicant-card {
+        padding: 16px;
+    }
+}
