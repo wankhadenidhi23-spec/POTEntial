@@ -232,19 +232,44 @@ async function loadApplications() {
       "<p>Unable to load applications.</p>";
     return;
   }
+if (!applications.length) {
+  container.innerHTML =
+    "<p>No students have applied yet.</p>";
+  return;
+}
 
-  if (!applications.length) {
-    container.innerHTML =
-      "<p>No students have applied yet.</p>";
-    return;
-  }
+
+/* GET STUDENT NAMES */
+
+const studentIds = applications.map(
+  (app) => app.student_id
+);
+
+const { data: students, error: studentsError } =
+  await supabaseClient
+    .from("profiles")
+    .select("user_id, full_name")
+    .in("user_id", studentIds);
+
+if (studentsError) {
+  console.error(studentsError);
+}
+
+container.innerHTML = "";
 
   container.innerHTML = "";
 
-  applications.forEach((app) => {
-    const job = jobs.find((j) => j.id === app.job_id);
+ applications.forEach((app) => {
+  const job = jobs.find((j) => j.id === app.job_id);
 
-    const status = (app.status || "pending").toLowerCase();
+  const student = students?.find(
+    (s) => s.user_id === app.student_id
+  );
+
+  const studentName =
+    student?.full_name || "Student";
+
+  const status = (app.status || "pending").toLowerCase();
 
     const card = document.createElement("div");
     card.className = "job-card";
