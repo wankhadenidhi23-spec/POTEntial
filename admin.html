@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Potential - Admin Panel</title>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #f7f1ff, #eee8ff);
+            color: #292044;
+            min-height: 100vh;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            color: white;
+            padding: 25px 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 18px rgba(91, 63, 140, 0.20);
+        }
+
+        .header h1 {
+            font-size: 29px;
+            margin-bottom: 7px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.92;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .connection {
+            background: rgba(255,255,255,0.20);
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+
+        .logout {
+            background: white;
+            color: #7651d6;
+            border: none;
+            padding: 11px 19px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: #f3efff;
+        }
+
+        /* ================= MAIN ================= */
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+            margin: 32px auto;
+        }
+
+        /* ================= STATISTICS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #e5dcfa;
+            box-shadow: 0 5px 18px rgba(91, 63, 140, 0.10);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            color: #49386d;
+            margin-bottom: 13px;
+        }
+
+        .number {
+            font-size: 34px;
+            font-weight: bold;
+            color: #7651d6;
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            color: #7c7195;
+            font-size: 14px;
+        }
+
+        /* ================= SECTION ================= */
+
+        .section {
+            background: rgba(255,255,255,0.97);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(91, 63, 140, 0.10);
+            border: 1px solid #e5dcfa;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+            color: #4c367e;
+        }
+
+        /* ================= LIST ================= */
+
+        .list {
+            width: 100%;
+        }
+
+        .list-item {
+            background: #faf8ff;
+            border: 1px solid #e5dcfa;
+            border-radius: 12px;
+            padding: 17px;
+            margin-bottom: 12px;
+        }
+
+        .list-item h3 {
+            color: #4b357a;
+            margin-bottom: 7px;
+        }
+
+        .list-item p {
+            color: #6f6485;
+            margin-bottom: 5px;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        button {
+            font-family: inherit;
+        }
+
+        .approve,
+        .approve-btn {
+            background: #22a06b;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 7px;
+        }
+
+        .approve:hover,
+        .approve-btn:hover {
+            background: #188657;
+        }
+
+        .reject,
+        .reject-btn {
+            background: #e05252;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .reject:hover,
+        .reject-btn:hover {
+            background: #c63d3d;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #7b708e;
+            background: #faf8ff;
+            border-radius: 10px;
+            border: 1px dashed #d9cdf3;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 18px;
+            }
+
+            .header-right {
+                flex-wrap: wrap;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+        <div>
+            <h1>Potential Admin Panel</h1>
+
+            <p>
+                Manage businesses, jobs and student applications
+            </p>
+        </div>
+
+
+        <div class="header-right">
+
+            <div id="connectionStatus" class="connection">
+                ● Checking connection...
+            </div>
+
+            <span>Admin</span>
+
+            <button id="logoutBtn" class="logout">
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="container">
+
+
+        <!-- ================= STATISTICS ================= -->
+
+        <section class="stats">
+
+
+            <div class="card">
+
+                <h3>Total Businesses</h3>
+
+                <div id="totalBusinesses" class="number">
+                    0
+                </div>
+
+                <p>
+                    Registered businesses
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>Pending Businesses</h3>
+
+                <div id="pendingBusinesses" class="number">
+                    0
+                </div>
+
+                <p>
+                    Waiting for approval
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>Total Jobs</h3>
+
+                <div id="totalJobs" class="number">
+                    0
+                </div>
+
+                <p>
+                    Jobs posted
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>New Applications</h3>
+
+                <div id="totalApplications" class="number">
+                    0
+                </div>
+
+                <p>
+                    Student applications
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================= BUSINESS APPROVAL ================= -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>
+                    Business Approval
+                </h2>
+
+            </div>
+
+
+            <div id="businessList" class="list">
+
+                Loading businesses...
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= JOBS ================= -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>
+                    Jobs
+                </h2>
+
+            </div>
+
+
+            <div id="jobList" class="list">
+
+                Loading jobs...
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= APPLICATIONS ================= -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>
+                    Student Applications
+                </h2>
+
+            </div>
+
+
+            <div id="applicationList" class="list">
+
+                Loading applications...
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ================= SUPABASE FILES ================= -->
+
+    <script src="../supabase-config.js?v=2"></script>
+
+    <script src="../supabase-client.js?v=2"></script>
+
+
+    <!-- ================= ADMIN JAVASCRIPT ================= -->
+
+    <script src="./admin.js?v=2"></script>
+
+
+</body>
+
+</html>
