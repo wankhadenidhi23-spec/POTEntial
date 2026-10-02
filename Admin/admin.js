@@ -1,5 +1,6 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
+
 // =====================================================
 // SUPABASE CONFIG
 // =====================================================
@@ -55,6 +56,7 @@ function showApp() {
 
 loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+
     loginError.textContent = "";
     loginBtn.disabled = true;
     loginBtn.textContent = "Logging in...";
@@ -62,10 +64,13 @@ loginForm.addEventListener("submit", async (event) => {
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+    });
 
     if (error) {
-        loginError.textContent = "Wrong email or password.";
+        loginError.textContent = error.message;
     } else if (!(await isAdmin(data.user.id))) {
         await supabase.auth.signOut();
         loginError.textContent = "This account is not an admin.";
@@ -77,7 +82,6 @@ loginForm.addEventListener("submit", async (event) => {
     loginBtn.disabled = false;
     loginBtn.textContent = "Login";
 });
-
 logoutBtn.addEventListener("click", async () => {
     await supabase.auth.signOut();
     showLogin();
@@ -188,40 +192,6 @@ async function loadOverview() {
         console.error("Overview error:", error);
     }
 }
-
-// =====================================================
-// RECENT APPLICATIONS
-// =====================================================
-async function loadRecentApplications() {
-    const tbody = document.getElementById("recentApplications");
-
-    const { data, error } = await supabase
-        .from("applications")
-        .select("id, job_id, student_id, status, applied_at")
-        .order("applied_at", { ascending: false })
-        .limit(8);
-
-    if (error) {
-        console.error("Recent applications error:", error);
-        tbody.innerHTML = messageRow(4, "Unable to load applications.");
-        return;
-    }
-
-    if (!data || data.length === 0) {
-        tbody.innerHTML = messageRow(4, "No applications found.");
-        return;
-    }
-
-    tbody.innerHTML = data.map(app => `
-        <tr>
-            <td>${escapeHTML(app.student_id)}</td>
-            <td>${escapeHTML(app.job_id)}</td>
-            <td>${statusHTML(app.status)}</td>
-            <td>${formatDate(app.applied_at)}</td>
-        </tr>
-    `).join("");
-}
-
 // =====================================================
 // BUSINESSES / STUDENTS
 // =====================================================
@@ -231,9 +201,9 @@ async function loadProfiles(role, tbodyId, label) {
 
     const { data, error } = await supabase
         .from("profiles")
-        .select("full_name, Email, Role, created_at")
+        .select("full_name, Email, Role, Created_at")
         .eq("Role", role)
-        .order("created_at", { ascending: false });
+        .order("Created_at", { ascending: false });
 
     if (error) {
         console.error(label + " error:", error);
@@ -251,11 +221,10 @@ async function loadProfiles(role, tbodyId, label) {
             <td>${escapeHTML(item.full_name)}</td>
             <td>${escapeHTML(item.Email)}</td>
             <td>${escapeHTML(item.Role)}</td>
-            <td>${formatDate(item.created_at)}</td>
+            <td>${formatDate(item.Created_at)}</td>
         </tr>
     `).join("");
 }
-
 const loadBusinesses = () => loadProfiles("business", "businessTable", "businesses");
 const loadStudents = () => loadProfiles("student", "studentTable", "students");
 
@@ -296,46 +265,67 @@ async function loadJobs() {
 // =====================================================
 // APPLICATIONS (with Approve / Reject)
 // =====================================================
-async function loadApplications() {
-    const tbody = document.getElementById("applicationTable");
-    tbody.innerHTML = messageRow(6, "Loading...");
+async function loadRecentApplications() {
+    const tbody = document.getElementById("recentApplications");
 
     const { data, error } = await supabase
         .from("applications")
         .select("id, job_id, student_id, status, applied_at")
-        .order("applied_at", { ascending: false });
+        .order("applied_at", { ascending: false })
+        .limit(8);
 
     if (error) {
-        console.error("Applications error:", error);
-        tbody.innerHTML = messageRow(6, error.message);
+        console.error("Recent applications error:", error);
+        tbody.innerHTML = messageRow(4, "Unable to load applications.");
         return;
     }
 
-    const list = data || [];
-    const countOf = (s) => list.filter(a => a.status === s).length;
-
-    document.getElementById("pendingApplications").textContent = countOf("pending");
-    document.getElementById("acceptedApplications").textContent = countOf("accepted");
-    document.getElementById("rejectedApplications").textContent = countOf("rejected");
-
-    if (list.length === 0) {
-        tbody.innerHTML = messageRow(6, "No applications found.");
+    if (!data || data.length === 0) {
+        tbody.innerHTML = messageRow(4, "No applications found.");
         return;
     }
 
-    tbody.innerHTML = list.map(app => `
+    // Get all student IDs and job IDs
+    const studentIds = [...new Set(data.map(app => app.student_id).filter(Boolean))];
+    const jobIds = [...new Set(data.map(app => app.job_id).filter(Boolean))];
+
+    // Get student names
+    const { data: profiles } = await supabase
+        .from("profiles")
+        .select("Id, user_id, full_name")
+        .or(
+            `Id.in.(${studentIds.join(",")}),user_id.in.(${studentIds.join(",")})`
+        );
+
+    // Get job titles
+    const { data: jobs } = await supabase
+        .from("jobs")
+        .select("id, title")
+        .in("id", jobIds);
+
+    // Create lookup maps
+    const studentMap = {};
+    (profiles || []).forEach(profile => {
+        if (profile.Id) {
+            studentMap[profile.Id] = profile.full_name;
+        }
+
+        if (profile.user_id) {
+            studentMap[profile.user_id] = profile.full_name;
+        }
+    });
+
+    const jobMap = {};
+    (jobs || []).forEach(job => {
+        jobMap[job.id] = job.title;
+    });
+
+    tbody.innerHTML = data.map(app => `
         <tr>
-            <td>${escapeHTML(app.id)}</td>
-            <td>${escapeHTML(app.job_id)}</td>
-            <td>${escapeHTML(app.student_id)}</td>
+            <td>${escapeHTML(studentMap[app.student_id] || "Unknown Student")}</td>
+            <td>${escapeHTML(jobMap[app.job_id] || "Unknown Opportunity")}</td>
             <td>${statusHTML(app.status)}</td>
             <td>${formatDate(app.applied_at)}</td>
-            <td>
-                ${app.status === "accepted" ? "" :
-                    `<button class="action-btn approve" data-id="${escapeHTML(app.id)}" data-status="accepted">✔ Approve</button>`}
-                ${app.status === "rejected" ? "" :
-                    `<button class="action-btn reject" data-id="${escapeHTML(app.id)}" data-status="rejected">✖ Reject</button>`}
-            </td>
         </tr>
     `).join("");
 }
